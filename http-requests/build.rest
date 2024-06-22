@@ -1,0 +1,4 @@
+@port=3000
+
+GET localhost:{{port}}/api/build
+Accept: application/json
