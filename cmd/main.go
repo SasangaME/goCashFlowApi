@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/SasangaME/goCashFlowApi/pkg/routes"
+	"github.com/SasangaME/goCashFlowApi/pkg/util"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 func main() {
@@ -14,7 +16,12 @@ func main() {
 
 	routes.SetupRoutes(app)
 
-	err := app.Listen(":3000")
+	port, err := util.Config("PORT")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = app.Listen(port)
 	if err != nil {
 		panic(err)
 	}

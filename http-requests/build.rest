@@ -1,4 +1,4 @@
-@port=3000
+@base_url=localhost:3001
 
-GET localhost:{{port}}/api/build
+GET {{base_url}}/api/build
 Accept: application/json

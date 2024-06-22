@@ -1,3 +1,3 @@
-@port = 3000
+@base_url = localhost:3001
 
-GET localhost:{{port}}
+GET {{base_url}}
