@@ -1,0 +1,4 @@
+@base_url=localhost:3001
+
+GET {{base_url}}/api/build
+Accept: application/json
