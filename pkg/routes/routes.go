@@ -7,4 +7,10 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Get("/api/build", handler.GetBuild)
+
+	// role
+	app.Get("/api/roles", handler.RoleGetAll)
+	app.Get("/api/roles/:id", handler.RoleGetById)
+	app.Post("/api/roles", handler.RoleCreate)
+	app.Put("/api/roles/:id", handler.RoleUpdate)
 }

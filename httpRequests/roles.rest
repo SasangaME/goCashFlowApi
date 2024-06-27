@@ -1,0 +1,19 @@
+@url=localhost:3001/api/roles
+
+GET {{url}}
+Accept: application/json
+
+###
+@id = d51d6cb6-67be-4ab6-9782-aefcdbb55872
+
+GET {{url}}/{{id}}
+Accept: application/json
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name" : "Admin",
+  "description" : "admin role"
+}
