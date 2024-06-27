@@ -6,6 +6,7 @@ import (
 	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/exception"
 	"github.com/google/uuid"
+	"time"
 )
 
 func RoleFindAll() ([]entity.Role, error) {
@@ -25,5 +26,39 @@ func RoleFindById(id string) (entity.Role, exception.ApplicationError) {
 			ErrorMessage: "role not found for id: " + id,
 		}
 	}
-	return role, exception.ApplicationError{}
+	return role, exception.ApplicationError{
+		StatusCode: constants.Success,
+	}
+}
+
+func RoleCreate(role *entity.Role) (*entity.Role, exception.ApplicationError) {
+	db := database.Database.Db
+	role.Id = uuid.New()
+	role.CreatedAt = time.Now()
+	err := db.Create(&role).Error
+	if err != nil {
+		return role, exception.ApplicationError{
+			StatusCode:   constants.InternalServerError,
+			ErrorMessage: err.Error(),
+		}
+	}
+	return role, exception.ApplicationError{
+		StatusCode: constants.Created,
+	}
+}
+
+func RoleUpdate(id string, request *entity.Role) (*entity.Role, exception.ApplicationError) {
+	role, err := RoleFindById(id)
+	if err.StatusCode >= constants.Error {
+		return &role, err
+	}
+
+	db := database.Database.Db
+	role.Name = request.Name
+	role.Description = request.Description
+	role.UpdatedAt = time.Now()
+	db.Save(&role)
+	return &role, exception.ApplicationError{
+		StatusCode: constants.Success,
+	}
 }

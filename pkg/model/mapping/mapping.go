@@ -13,8 +13,8 @@ func RoleToDto(role entity.Role) *dto.RoleDto {
 	}
 }
 
-func DtoToRole(dto *dto.RoleDto) *entity.Role {
-	return &entity.Role{
+func DtoToRole(dto *dto.RoleDto) entity.Role {
+	return entity.Role{
 		Name:        dto.Name,
 		Description: dto.Description,
 	}
