@@ -54,7 +54,10 @@ func RoleCreate(c *fiber.Ctx) error {
 		})
 	}
 
-	service.RoleCreate(&role)
+	_, serviceErr := service.RoleCreate(&role)
+	if serviceErr.StatusCode != constants.Created {
+		return HandleException(c, serviceErr)
+	}
 	response := mapping.RoleToDto(role)
 	return c.Status(constants.Created).JSON(response)
 }
@@ -77,7 +80,10 @@ func RoleUpdate(c *fiber.Ctx) error {
 		})
 	}
 	role := mapping.DtoToRole(request)
-	service.RoleUpdate(id, &role)
+	_, serviceErr := service.RoleUpdate(id, &role)
+	if serviceErr.StatusCode != constants.Success {
+		return HandleException(c, serviceErr)
+	}
 	response := mapping.RoleToDto(role)
 	return c.Status(constants.Success).JSON(response)
 }
