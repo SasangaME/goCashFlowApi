@@ -12,7 +12,7 @@ import (
 func RoleGetAll(c *fiber.Ctx) error {
 	roles, err := service.RoleFindAll()
 	if err != nil {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
@@ -24,13 +24,13 @@ func RoleGetAll(c *fiber.Ctx) error {
 func RoleGetById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "id is required",
 		})
 	}
 	role, err := service.RoleFindById(id)
-	if err.StatusCode != constants.Success {
+	if err.IsError {
 		return HandleException(c, err)
 	}
 	response := mapping.RoleToDto(role)
@@ -41,21 +41,21 @@ func RoleCreate(c *fiber.Ctx) error {
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})
 	}
 	role := mapping.DtoToRole(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
 	}
 
 	_, serviceErr := service.RoleCreate(&role)
-	if serviceErr.StatusCode != constants.Created {
+	if serviceErr.IsError {
 		return HandleException(c, serviceErr)
 	}
 	response := mapping.RoleToDto(role)
@@ -65,7 +65,7 @@ func RoleCreate(c *fiber.Ctx) error {
 func RoleUpdate(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "id is required",
 		})
@@ -74,14 +74,14 @@ func RoleUpdate(c *fiber.Ctx) error {
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationStatus{
+		return HandleException(c, exception.ApplicationError{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})
 	}
 	role := mapping.DtoToRole(request)
 	_, serviceErr := service.RoleUpdate(id, &role)
-	if serviceErr.StatusCode != constants.Success {
+	if serviceErr.IsError {
 		return HandleException(c, serviceErr)
 	}
 	response := mapping.RoleToDto(role)
