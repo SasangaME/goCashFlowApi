@@ -1,10 +1,10 @@
 package exception
 
-type ApplicationError struct {
+type ApplicationStatus struct {
 	StatusCode   int
 	ErrorMessage string
 }
 
-func (e ApplicationError) Error() string {
+func (e ApplicationStatus) Error() string {
 	return e.ErrorMessage
 }

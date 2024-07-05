@@ -12,7 +12,7 @@ import (
 func RoleGetAll(c *fiber.Ctx) error {
 	roles, err := service.RoleFindAll()
 	if err != nil {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
@@ -24,7 +24,7 @@ func RoleGetAll(c *fiber.Ctx) error {
 func RoleGetById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "id is required",
 		})
@@ -41,14 +41,14 @@ func RoleCreate(c *fiber.Ctx) error {
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})
 	}
 	role := mapping.DtoToRole(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
@@ -65,7 +65,7 @@ func RoleCreate(c *fiber.Ctx) error {
 func RoleUpdate(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "id is required",
 		})
@@ -74,7 +74,7 @@ func RoleUpdate(c *fiber.Ctx) error {
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return HandleException(c, exception.ApplicationError{
+		return HandleException(c, exception.ApplicationStatus{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})

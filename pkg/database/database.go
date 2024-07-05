@@ -60,7 +60,10 @@ func Connect() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations")
-	err = db.AutoMigrate(&entity.Role{})
+	err = db.AutoMigrate(
+		&entity.Role{},
+		&entity.User{},
+	)
 	if err != nil {
 		return
 	}
