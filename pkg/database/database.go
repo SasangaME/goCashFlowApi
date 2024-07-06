@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
 	"github.com/SasangaME/goCashFlowApi/pkg/util"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -59,15 +58,5 @@ func Connect() {
 	log.Println("connected to the database")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
-	log.Println("running migrations")
-	err = db.AutoMigrate(
-		&entity.Role{},
-		&entity.User{},
-	)
-	if err != nil {
-		return
-	}
-	Database = DbInstance{
-		Db: db,
-	}
+	addMigrations(db)
 }
