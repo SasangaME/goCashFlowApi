@@ -9,69 +9,6 @@ import (
 	"time"
 )
 
-func RoleFindAll() ([]entity.Role, error) {
-	db := database.Database.Db
-	var roles []entity.Role
-	db.Find(&roles)
-	return roles, nil
-}
-
-func RoleFindById(id string) (entity.Role, exception.ApplicationError) {
-	db := database.Database.Db
-	var role entity.Role
-	db.Find(&role, "id = ?", id)
-	if role.Id == uuid.Nil {
-		return entity.Role{}, exception.ApplicationError{
-			IsError:      true,
-			StatusCode:   constants.NotFound,
-			ErrorMessage: "role not found for id: " + id,
-		}
-	}
-	return role, exception.ApplicationError{
-		IsError: false,
-	}
-}
-
-func RoleCreate(role *entity.Role) (*entity.Role, exception.ApplicationError) {
-	db := database.Database.Db
-	role.Id = uuid.New()
-	role.CreatedAt = time.Now()
-	err := db.Create(&role).Error
-	if err != nil {
-		return role, exception.ApplicationError{
-			IsError:      true,
-			StatusCode:   constants.InternalServerError,
-			ErrorMessage: err.Error(),
-		}
-	}
-	return role, exception.ApplicationError{
-		IsError: false,
-	}
-}
-
-func RoleUpdate(id string, request *entity.Role) (*entity.Role, exception.ApplicationError) {
-	role, err := RoleFindById(id)
-	if err.StatusCode >= constants.Error {
-		return &role, err
-	}
-
-	db := database.Database.Db
-	role.Name = request.Name
-	role.Description = request.Description
-	role.UpdatedAt = time.Now()
-	dbErr := db.Save(&role).Error
-	if dbErr != nil {
-		return &role, exception.ApplicationError{
-			IsError:      true,
-			StatusCode:   constants.InternalServerError,
-			ErrorMessage: dbErr.Error(),
-		}
-	}
-	return &role, exception.ApplicationError{
-		StatusCode: constants.Success,
-	}
-}
-
 func UserFindAll() ([]entity.User, exception.ApplicationError) {
 	db := database.Database.Db
 	var users []entity.User
