@@ -27,3 +27,33 @@ func RoleListToDto(roles []entity.Role) []*dto.RoleDto {
 	}
 	return roleList
 }
+
+func UserRequestToUser(request *dto.UserRequest) entity.User {
+	return entity.User{
+		Username:  request.Username,
+		Password:  request.Password,
+		FirstName: request.FirstName,
+		LastName:  request.LastName,
+		RoleId:    request.RoleId,
+		Email:     request.Email,
+	}
+}
+
+func UserToUserResponse(user entity.User) *dto.UserResponse {
+	return &dto.UserResponse{
+		Id:        user.Id,
+		Username:  user.Username,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		RoleId:    user.RoleId,
+		Email:     user.Email,
+	}
+}
+
+func UserListToUserResponse(users []entity.User) []*dto.UserResponse {
+	userList := make([]*dto.UserResponse, len(users))
+	for i, user := range users {
+		userList[i] = UserToUserResponse(user)
+	}
+	return userList
+}

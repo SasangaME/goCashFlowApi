@@ -13,3 +13,21 @@ type RoleDto struct {
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 }
+
+type UserRequest struct {
+	Username  string    `json:"username"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	RoleId    uuid.UUID `json:"roleId"`
+}
+
+type UserResponse struct {
+	Id        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Email     string    `json:"email"`
+	RoleId    uuid.UUID `json:"role_id"`
+}
