@@ -59,4 +59,8 @@ func Connect() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	addMigrations(db)
+
+	Database = DbInstance{
+		Db: db,
+	}
 }

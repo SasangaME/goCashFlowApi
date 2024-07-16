@@ -15,7 +15,5 @@ func addMigrations(db *gorm.DB) {
 	if err != nil {
 		return
 	}
-	Database = DbInstance{
-		Db: db,
-	}
+
 }

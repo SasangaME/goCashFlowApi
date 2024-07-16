@@ -32,19 +32,19 @@ func RoleFindById(id string) (entity.Role, exception.ApplicationError) {
 	}
 }
 
-func RoleCreate(role *entity.Role) (*entity.Role, exception.ApplicationError) {
+func RoleCreate(role *entity.Role) exception.ApplicationError {
 	db := database.Database.Db
 	role.Id = uuid.New()
 	role.CreatedAt = time.Now()
 	err := db.Create(&role).Error
 	if err != nil {
-		return role, exception.ApplicationError{
+		return exception.ApplicationError{
 			IsError:      true,
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		}
 	}
-	return role, exception.ApplicationError{
+	return exception.ApplicationError{
 		IsError: false,
 	}
 }
