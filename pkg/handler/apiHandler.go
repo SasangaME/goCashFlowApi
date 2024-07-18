@@ -2,32 +2,41 @@ package handler
 
 import (
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
-	"github.com/SasangaME/goCashFlowApi/pkg/model/exception"
+	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
 	"github.com/gofiber/fiber/v2"
 )
 
-func handleException(c *fiber.Ctx, errorDetail exception.ApplicationError) error {
+func handleException(c *fiber.Ctx, errorDetail dto.ApplicationResponse) error {
 	return c.Status(errorDetail.StatusCode).JSON(fiber.Map{
 		"errorMessage": errorDetail.ErrorMessage,
 	})
 }
 
-func handleBadRequest(c *fiber.Ctx, errorMessage string) {
-
+func handleBadRequest(c *fiber.Ctx, errorMessage string) error {
+	return handleException(c, dto.ApplicationResponse{
+		StatusCode:   constants.BabRequest,
+		ErrorMessage: errorMessage,
+	})
 }
 
-func handleNotFound(c *fiber.Ctx, errorMessage string) {
-
+func handleNotFound(c *fiber.Ctx, errorMessage string) error {
+	return handleException(c, dto.ApplicationResponse{
+		StatusCode:   constants.NotFound,
+		ErrorMessage: errorMessage,
+	})
 }
 
-func handleInternalServerError(c *fiber.Ctx, errorMessage string) {
-
+func handleInternalServerError(c *fiber.Ctx, errorMessage string) error {
+	return handleException(c, dto.ApplicationResponse{
+		StatusCode:   constants.InternalServerError,
+		ErrorMessage: errorMessage,
+	})
 }
 
-func idValidation(c *fiber.Ctx) (string, error) {
+func validateId(c *fiber.Ctx) (string, error) {
 	id := c.Params("id")
 	if id == "" {
-		return "", handleException(c, exception.ApplicationError{
+		return "", handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "id is required",
 		})

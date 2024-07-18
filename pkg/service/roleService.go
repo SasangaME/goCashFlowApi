@@ -1,12 +1,13 @@
 package service
 
 import (
+	"time"
+
 	"github.com/SasangaME/goCashFlowApi/pkg/database"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
+	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
-	"github.com/SasangaME/goCashFlowApi/pkg/model/exception"
 	"github.com/google/uuid"
-	"time"
 )
 
 func RoleFindAll() ([]entity.Role, error) {
@@ -16,40 +17,40 @@ func RoleFindAll() ([]entity.Role, error) {
 	return roles, nil
 }
 
-func RoleFindById(id string) (entity.Role, exception.ApplicationError) {
+func RoleFindById(id string) (entity.Role, dto.ApplicationResponse) {
 	db := database.Database.Db
 	var role entity.Role
 	db.Find(&role, "id = ?", id)
 	if role.Id == uuid.Nil {
-		return entity.Role{}, exception.ApplicationError{
+		return entity.Role{}, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.NotFound,
 			ErrorMessage: "role not found for id: " + id,
 		}
 	}
-	return role, exception.ApplicationError{
+	return role, dto.ApplicationResponse{
 		IsError: false,
 	}
 }
 
-func RoleCreate(role *entity.Role) exception.ApplicationError {
+func RoleCreate(role *entity.Role) dto.ApplicationResponse {
 	db := database.Database.Db
 	role.Id = uuid.New()
 	role.CreatedAt = time.Now()
 	err := db.Create(&role).Error
 	if err != nil {
-		return exception.ApplicationError{
+		return dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		}
 	}
-	return exception.ApplicationError{
+	return dto.ApplicationResponse{
 		IsError: false,
 	}
 }
 
-func RoleUpdate(id string, request *entity.Role) (*entity.Role, exception.ApplicationError) {
+func RoleUpdate(id string, request *entity.Role) (*entity.Role, dto.ApplicationResponse) {
 	role, err := RoleFindById(id)
 	if err.StatusCode >= constants.Error {
 		return &role, err
@@ -61,13 +62,13 @@ func RoleUpdate(id string, request *entity.Role) (*entity.Role, exception.Applic
 	role.UpdatedAt = time.Now()
 	dbErr := db.Save(&role).Error
 	if dbErr != nil {
-		return &role, exception.ApplicationError{
+		return &role, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: dbErr.Error(),
 		}
 	}
-	return &role, exception.ApplicationError{
+	return &role, dto.ApplicationResponse{
 		StatusCode: constants.Success,
 	}
 }

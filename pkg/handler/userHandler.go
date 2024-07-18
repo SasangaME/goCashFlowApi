@@ -3,7 +3,6 @@ package handler
 import (
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
-	"github.com/SasangaME/goCashFlowApi/pkg/model/exception"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/mapping"
 	"github.com/SasangaME/goCashFlowApi/pkg/service"
 	"github.com/gofiber/fiber/v2"
@@ -12,7 +11,7 @@ import (
 func UserGetAll(c *fiber.Ctx) error {
 	users, err := service.UserFindAll()
 	if err.IsError {
-		return handleException(c, exception.ApplicationError{
+		return handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
@@ -22,7 +21,7 @@ func UserGetAll(c *fiber.Ctx) error {
 }
 
 func UserGetById(c *fiber.Ctx) error {
-	id, _ := idValidation(c)
+	id, _ := validateId(c)
 
 	user, err := service.UserFindById(id)
 	if err.IsError {
@@ -36,7 +35,7 @@ func UserCreate(c *fiber.Ctx) error {
 	request := new(dto.UserRequest)
 	err := c.BodyParser(request)
 	if err != nil {
-		return handleException(c, exception.ApplicationError{
+		return handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})

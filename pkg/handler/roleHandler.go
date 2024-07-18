@@ -3,7 +3,6 @@ package handler
 import (
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
-	"github.com/SasangaME/goCashFlowApi/pkg/model/exception"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/mapping"
 	"github.com/SasangaME/goCashFlowApi/pkg/service"
 	"github.com/gofiber/fiber/v2"
@@ -12,7 +11,7 @@ import (
 func RoleGetAll(c *fiber.Ctx) error {
 	roles, err := service.RoleFindAll()
 	if err != nil {
-		return handleException(c, exception.ApplicationError{
+		return handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.InternalServerError,
 			ErrorMessage: err.Error(),
 		})
@@ -22,7 +21,7 @@ func RoleGetAll(c *fiber.Ctx) error {
 }
 
 func RoleGetById(c *fiber.Ctx) error {
-	id, _ := idValidation(c)
+	id, _ := validateId(c)
 	role, err := service.RoleFindById(id)
 	if err.IsError {
 		return handleException(c, err)
@@ -35,34 +34,28 @@ func RoleCreate(c *fiber.Ctx) error {
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return handleException(c, exception.ApplicationError{
+		return handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})
 	}
 	role := mapping.DtoToRole(request)
-	if err != nil {
-		return handleException(c, exception.ApplicationError{
-			StatusCode:   constants.InternalServerError,
-			ErrorMessage: err.Error(),
-		})
-	}
 
-	serviceErr := service.RoleCreate(&role)
-	if serviceErr.IsError {
-		return handleException(c, serviceErr)
+	serviceResponse := service.RoleCreate(&role)
+	if serviceResponse.IsError {
+		return handleException(c, serviceResponse)
 	}
 	response := mapping.RoleToDto(role)
 	return c.Status(constants.Created).JSON(response)
 }
 
 func RoleUpdate(c *fiber.Ctx) error {
-	id, _ := idValidation(c)
+	id, _ := validateId(c)
 
 	request := new(dto.RoleDto)
 	err := c.BodyParser(request)
 	if err != nil {
-		return handleException(c, exception.ApplicationError{
+		return handleException(c, dto.ApplicationResponse{
 			StatusCode:   constants.BabRequest,
 			ErrorMessage: "request body parse error",
 		})

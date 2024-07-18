@@ -1,9 +1,10 @@
 package database
 
 import (
+	"log"
+
 	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
 	"gorm.io/gorm"
-	"log"
 )
 
 func addMigrations(db *gorm.DB) {
