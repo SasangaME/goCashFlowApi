@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/SasangaME/goCashFlowApi/pkg/util"
 	"time"
 
 	"github.com/SasangaME/goCashFlowApi/pkg/database"
@@ -38,8 +39,18 @@ func UserFindById(id string) (entity.User, dto.ApplicationResponse) {
 func UserCreate(user *entity.User) (*entity.User, dto.ApplicationResponse) {
 	db := database.Database.Db
 	user.Id = uuid.New()
+	passwordHash, err := util.HashPassword(user.Password)
+	if err != nil {
+		return user, dto.ApplicationResponse{
+			IsError:      true,
+			StatusCode:   constants.InternalServerError,
+			ErrorMessage: "password cannot be hashed",
+			StackTrace:   err.Error(),
+		}
+	}
+	user.Password = passwordHash
 	user.CreatedAt = time.Now()
-	err := db.Create(&user).Error
+	err = db.Create(&user).Error
 	if err != nil {
 		return user, dto.ApplicationResponse{
 			IsError:      true,
