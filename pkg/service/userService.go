@@ -55,7 +55,8 @@ func UserCreate(user *entity.User) (*entity.User, dto.ApplicationResponse) {
 		return user, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.InternalServerError,
-			ErrorMessage: err.Error(),
+			ErrorMessage: "cannot create user",
+			StackTrace:   err.Error(),
 		}
 	}
 	return user, dto.ApplicationResponse{
@@ -76,7 +77,24 @@ func UserUpdate(id string, request *entity.User) (*entity.User, dto.ApplicationR
 		return &user, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.InternalServerError,
-			ErrorMessage: err.Error(),
+			ErrorMessage: "cannot save user",
+			StackTrace:   err.Error(),
+		}
+	}
+	return &user, dto.ApplicationResponse{
+		IsError: false,
+	}
+}
+
+func userFindByUsername(username string) (*entity.User, dto.ApplicationResponse) {
+	db := database.Database.Db
+	var user entity.User
+	db.Find(&user, "username = ?", username)
+	if user.Id == uuid.Nil {
+		return &user, dto.ApplicationResponse{
+			IsError:      true,
+			StatusCode:   constants.NotFound,
+			ErrorMessage: "user not found for username: " + username,
 		}
 	}
 	return &user, dto.ApplicationResponse{

@@ -1,0 +1,9 @@
+@url=localhost:3001/api/auth
+
+PUT {{url}}/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "userpw"
+}

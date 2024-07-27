@@ -14,9 +14,11 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/api/roles", handler.RoleCreate)
 	app.Put("/api/roles/:id", handler.RoleUpdate)
 
-	//user
+	// user
 	app.Get("/api/users", handler.UserGetAll)
 	app.Get("/api/users/:id", handler.UserGetById)
 	app.Post("/api/users", handler.UserCreate)
 
+	// auth
+	app.Put("/api/auth/login", handler.Login)
 }
