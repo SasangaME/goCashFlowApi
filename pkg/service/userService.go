@@ -86,10 +86,10 @@ func UserUpdate(id string, request *entity.User) (*entity.User, dto.ApplicationR
 	}
 }
 
-func userFindByUsername(username string) (*entity.User, dto.ApplicationResponse) {
+func UserFindByUsername(username string) (*entity.User, dto.ApplicationResponse) {
 	db := database.Database.Db
 	var user entity.User
-	db.Find(&user, "username = ?", username)
+	db.Preload("Role").Find(&user, "username = ?", username)
 	if user.Id == uuid.Nil {
 		return &user, dto.ApplicationResponse{
 			IsError:      true,

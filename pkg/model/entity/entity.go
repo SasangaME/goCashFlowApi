@@ -22,4 +22,5 @@ type User struct {
 	LastName  string    `gorm:"type:varchar(255);not null"`
 	Email     string    `gorm:"type:varchar(255);null"`
 	RoleId    uuid.UUID `gorm:"type:uuid;not null"`
+	Role      Role      `gorm:"foreignKey:RoleId"`
 }

@@ -2,11 +2,12 @@ package routes
 
 import (
 	"github.com/SasangaME/goCashFlowApi/pkg/handler"
+	"github.com/SasangaME/goCashFlowApi/pkg/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
-	app.Get("/api/build", handler.GetBuild)
+	app.Get("/api/build", middleware.AuthorizeMiddleware([]string{"User"}), handler.GetBuild)
 
 	// role
 	app.Get("/api/roles", handler.RoleGetAll)

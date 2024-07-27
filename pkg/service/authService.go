@@ -7,7 +7,7 @@ import (
 )
 
 func Login(username, password string) (string, dto.ApplicationResponse) {
-	user, err := userFindByUsername(username)
+	user, err := UserFindByUsername(username)
 	if err.IsError {
 		return "", err
 	}
@@ -31,4 +31,38 @@ func Login(username, password string) (string, dto.ApplicationResponse) {
 		}
 	}
 	return jwt, err
+}
+
+func Authorize(jwt string, roles []string) dto.ApplicationResponse {
+	username, err := util.ValidateJWT(jwt)
+	if err != nil {
+		return dto.ApplicationResponse{
+			IsError:    true,
+			StatusCode: constants.NotAuthorized,
+		}
+	}
+
+	user, userResponse := UserFindByUsername(username)
+	if userResponse.IsError {
+		return userResponse
+	}
+
+	isValid := false
+	for _, role := range roles {
+		if user.Role.Name == role {
+			isValid = true
+			break
+		}
+	}
+
+	if !isValid {
+		return dto.ApplicationResponse{
+			IsError:    true,
+			StatusCode: constants.NotAuthorized,
+		}
+	}
+
+	return dto.ApplicationResponse{
+		IsError: false,
+	}
 }
