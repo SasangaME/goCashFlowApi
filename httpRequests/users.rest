@@ -4,7 +4,7 @@ GET {{url}}
 Accept: application/json
 
 ###
-GET {{url}}/de774f36-f664-47b6-a15f-63f2c8a68ff9
+GET {{url}}/b84567bc-bec1-4a0a-bae4-4827154c70ba
 Accept: application/json
 
 ###
@@ -12,10 +12,10 @@ POST {{url}}
 Content-Type: application/json
 
 {
-  "username": "sasanga",
-  "firstName": "Sasanga",
-  "lastName": "Edirisinghe",
-  "password": "sasa90",
+  "username": "user2",
+  "firstName": "User2",
+  "lastName": "User",
+  "password": "userpw",
   "email": "sasanga@gmail.com",
-  "roleId": "7948a34a-4bc9-4658-833e-2f6dea9a3a51"
+  "roleId": "d1efc6cc-5375-4e63-82cf-582d0346e70e"
 }

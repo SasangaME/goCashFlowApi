@@ -31,3 +31,8 @@ type UserResponse struct {
 	Email     string    `json:"email"`
 	RoleId    uuid.UUID `json:"role_id"`
 }
+
+type LoginRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

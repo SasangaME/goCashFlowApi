@@ -2,3 +2,4 @@
 
 GET {{base_url}}/api/build
 Accept: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjIxMDk0OTUsInN1YiI6InVzZXIxIn0.lSBh_potZQFPZLWZMChu1Q_tOvjKFWQRpqrVC2zqHaU
