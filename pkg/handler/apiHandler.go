@@ -33,7 +33,7 @@ func handleInternalServerError(c *fiber.Ctx, errorMessage string) error {
 	})
 }
 
-func HandleNothAuthorizedError(c *fiber.Ctx) error {
+func HandleUnauthorizedError(c *fiber.Ctx) error {
 	return handleException(c, dto.ApplicationResponse{
 		StatusCode:   constants.NotAuthorized,
 		ErrorMessage: "user not authorized",
