@@ -26,7 +26,7 @@ func handleNotFound(c *fiber.Ctx, errorMessage string) error {
 	})
 }
 
-func handleInternalServerError(c *fiber.Ctx, errorMessage string) error {
+func HandleInternalServerError(c *fiber.Ctx, errorMessage string) error {
 	return handleException(c, dto.ApplicationResponse{
 		StatusCode:   constants.InternalServerError,
 		ErrorMessage: errorMessage,
