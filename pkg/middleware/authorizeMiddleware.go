@@ -1,13 +1,14 @@
 package middleware
 
 import (
+	"strings"
+
 	"github.com/SasangaME/goCashFlowApi/pkg/handler"
 	"github.com/SasangaME/goCashFlowApi/pkg/service"
 	"github.com/gofiber/fiber/v2"
-	"strings"
 )
 
-func AuthorizeMiddleware(roles []string) fiber.Handler {
+func Authorize(roles []string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authorizeHeader := c.Get("Authorization")
 		if authorizeHeader == "" {
