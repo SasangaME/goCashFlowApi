@@ -7,7 +7,7 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	app.Get("/api/build", middleware.AuthorizeMiddleware([]string{"User"}), handler.GetBuild)
+	app.Get("/api/build", middleware.Authorize([]string{"User"}), handler.GetBuild)
 
 	// role
 	app.Get("/api/roles", handler.RoleGetAll)
