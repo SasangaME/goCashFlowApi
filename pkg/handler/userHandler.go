@@ -36,7 +36,7 @@ func UserCreate(c *fiber.Ctx) error {
 	err := c.BodyParser(request)
 	if err != nil {
 		return handleException(c, dto.ApplicationResponse{
-			StatusCode:   constants.BabRequest,
+			StatusCode:   constants.BadRequest,
 			ErrorMessage: "request body parse error",
 		})
 	}

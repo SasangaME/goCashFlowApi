@@ -1,14 +1,14 @@
 package service
 
 import (
-	"github.com/SasangaME/goCashFlowApi/pkg/util"
 	"time"
+
+	"github.com/SasangaME/goCashFlowApi/pkg/util"
 
 	"github.com/SasangaME/goCashFlowApi/pkg/database"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
-	"github.com/google/uuid"
 )
 
 func UserFindAll() ([]entity.User, dto.ApplicationResponse) {
@@ -24,7 +24,7 @@ func UserFindById(id string) (entity.User, dto.ApplicationResponse) {
 	db := database.Database.Db
 	var user entity.User
 	db.Find(&user, "id = ?", id)
-	if user.Id == uuid.Nil {
+	if user.Id == 0 {
 		return user, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.NotFound,
@@ -38,7 +38,6 @@ func UserFindById(id string) (entity.User, dto.ApplicationResponse) {
 
 func UserCreate(user *entity.User) (*entity.User, dto.ApplicationResponse) {
 	db := database.Database.Db
-	user.Id = uuid.New()
 	passwordHash, err := util.HashPassword(user.Password)
 	if err != nil {
 		return user, dto.ApplicationResponse{
@@ -90,7 +89,7 @@ func UserFindByUsername(username string) (*entity.User, dto.ApplicationResponse)
 	db := database.Database.Db
 	var user entity.User
 	db.Preload("Role").Find(&user, "username = ?", username)
-	if user.Id == uuid.Nil {
+	if user.Id == 0 {
 		return &user, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.NotFound,

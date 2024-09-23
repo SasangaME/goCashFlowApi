@@ -7,7 +7,6 @@ import (
 	"github.com/SasangaME/goCashFlowApi/pkg/model/constants"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/dto"
 	"github.com/SasangaME/goCashFlowApi/pkg/model/entity"
-	"github.com/google/uuid"
 )
 
 func RoleFindAll() ([]entity.Role, error) {
@@ -21,7 +20,7 @@ func RoleFindById(id string) (entity.Role, dto.ApplicationResponse) {
 	db := database.Database.Db
 	var role entity.Role
 	db.Find(&role, "id = ?", id)
-	if role.Id == uuid.Nil {
+	if role.Id == 0 {
 		return entity.Role{}, dto.ApplicationResponse{
 			IsError:      true,
 			StatusCode:   constants.NotFound,
@@ -35,7 +34,6 @@ func RoleFindById(id string) (entity.Role, dto.ApplicationResponse) {
 
 func RoleCreate(role *entity.Role) dto.ApplicationResponse {
 	db := database.Database.Db
-	role.Id = uuid.New()
 	role.CreatedAt = time.Now()
 	err := db.Create(&role).Error
 	if err != nil {

@@ -8,5 +8,5 @@ const (
 	NotFound            = 404
 	InternalServerError = 500
 	NotAuthorized       = 401
-	BabRequest          = 400
+	BadRequest          = 400
 )

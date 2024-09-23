@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"strings"
+
 	"github.com/SasangaME/goCashFlowApi/pkg/handler"
 	"github.com/SasangaME/goCashFlowApi/pkg/service"
 	"github.com/gofiber/fiber/v2"
-	"strings"
 )
 
 func AuthorizeMiddleware(roles []string) fiber.Handler {
@@ -19,10 +20,12 @@ func AuthorizeMiddleware(roles []string) fiber.Handler {
 			return handler.HandleUnauthorizedError(c)
 		}
 
-		authResponse := service.Authorize(jwtString, roles)
+		userId, authResponse := service.Authorize(jwtString, roles)
 		if authResponse.IsError {
 			return handler.HandleUnauthorizedError(c)
 		}
+
+		c.Locals("userId", userId)
 
 		return c.Next()
 	}

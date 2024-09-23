@@ -33,10 +33,10 @@ func Login(username, password string) (string, dto.ApplicationResponse) {
 	return jwt, err
 }
 
-func Authorize(jwt string, roles []string) dto.ApplicationResponse {
+func Authorize(jwt string, roles []string) (int64, dto.ApplicationResponse) {
 	username, err := util.ValidateJWT(jwt)
 	if err != nil {
-		return dto.ApplicationResponse{
+		return 0, dto.ApplicationResponse{
 			IsError:    true,
 			StatusCode: constants.NotAuthorized,
 		}
@@ -44,7 +44,7 @@ func Authorize(jwt string, roles []string) dto.ApplicationResponse {
 
 	user, userResponse := UserFindByUsername(username)
 	if userResponse.IsError {
-		return userResponse
+		return 0, userResponse
 	}
 
 	isValid := false
@@ -56,13 +56,13 @@ func Authorize(jwt string, roles []string) dto.ApplicationResponse {
 	}
 
 	if !isValid {
-		return dto.ApplicationResponse{
+		return 0, dto.ApplicationResponse{
 			IsError:    true,
 			StatusCode: constants.NotAuthorized,
 		}
 	}
 
-	return dto.ApplicationResponse{
+	return user.Id, dto.ApplicationResponse{
 		IsError: false,
 	}
 }
