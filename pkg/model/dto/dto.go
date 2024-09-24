@@ -5,13 +5,13 @@ import "github.com/google/uuid"
 type BuildDto struct {
 	Version string `json:"version"`
 	Env     string `json:"env"`
-	Build   string `json:"buid"`
+	Build   string `json:"build"`
 }
 
 type RoleDto struct {
-	Id          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
+	Id          int64  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type UserRequest struct {
@@ -24,7 +24,7 @@ type UserRequest struct {
 }
 
 type UserResponse struct {
-	Id        uuid.UUID `json:"id"`
+	Id        int64     `json:"id"`
 	Username  string    `json:"username"`
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
@@ -35,4 +35,11 @@ type UserResponse struct {
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type CategoryDto struct {
+	Id          int64  `json:"id"`
+	Name        string `json:"name"`
+	Code        string `json:"code"`
+	Description string `json:"description"`
 }

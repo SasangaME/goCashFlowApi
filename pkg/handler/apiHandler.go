@@ -14,7 +14,7 @@ func handleException(c *fiber.Ctx, errorDetail dto.ApplicationResponse) error {
 
 func handleBadRequest(c *fiber.Ctx, errorMessage string) error {
 	return handleException(c, dto.ApplicationResponse{
-		StatusCode:   constants.BabRequest,
+		StatusCode:   constants.BadRequest,
 		ErrorMessage: errorMessage,
 	})
 }
@@ -43,7 +43,7 @@ func validateId(c *fiber.Ctx) (string, error) {
 	id := c.Params("id")
 	if id == "" {
 		return "", handleException(c, dto.ApplicationResponse{
-			StatusCode:   constants.BabRequest,
+			StatusCode:   constants.BadRequest,
 			ErrorMessage: "id is required",
 		})
 	}

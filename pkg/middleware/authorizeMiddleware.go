@@ -20,10 +20,12 @@ func Authorize(roles []string) fiber.Handler {
 			return handler.HandleUnauthorizedError(c)
 		}
 
-		authResponse := service.Authorize(jwtString, roles)
+		userId, authResponse := service.Authorize(jwtString, roles)
 		if authResponse.IsError {
 			return handler.HandleUnauthorizedError(c)
 		}
+
+		c.Locals("userId", userId)
 
 		return c.Next()
 	}

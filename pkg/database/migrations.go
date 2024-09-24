@@ -12,6 +12,7 @@ func addMigrations(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&entity.Role{},
 		&entity.User{},
+		&entity.Category{},
 	)
 	if err != nil {
 		return
